@@ -1,4 +1,4 @@
-import { contract } from './contracts'
+import { contract } from './contracts';
 
 class Account {
   constructor(address, tokenAddress, provider) {
