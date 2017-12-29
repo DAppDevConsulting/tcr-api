@@ -1,0 +1,53 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "self",
+        "type": "AttributeStore.Data storage"
+      },
+      {
+        "name": "UUID",
+        "type": "bytes32"
+      },
+      {
+        "name": "attrName",
+        "type": "string"
+      }
+    ],
+    "name": "getAttribute",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "self",
+        "type": "AttributeStore.Data storage"
+      },
+      {
+        "name": "UUID",
+        "type": "bytes32"
+      },
+      {
+        "name": "attrName",
+        "type": "string"
+      },
+      {
+        "name": "attrVal",
+        "type": "uint256"
+      }
+    ],
+    "name": "attachAttribute",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  }
+]

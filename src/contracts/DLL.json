@@ -1,0 +1,88 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "self",
+        "type": "DLL.Data storage"
+      },
+      {
+        "name": "curr",
+        "type": "uint256"
+      }
+    ],
+    "name": "getNext",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "self",
+        "type": "DLL.Data storage"
+      },
+      {
+        "name": "curr",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPrev",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "self",
+        "type": "DLL.Data storage"
+      },
+      {
+        "name": "curr",
+        "type": "uint256"
+      }
+    ],
+    "name": "remove",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "self",
+        "type": "DLL.Data storage"
+      },
+      {
+        "name": "prev",
+        "type": "uint256"
+      },
+      {
+        "name": "curr",
+        "type": "uint256"
+      },
+      {
+        "name": "next",
+        "type": "uint256"
+      }
+    ],
+    "name": "insert",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  }
+]
