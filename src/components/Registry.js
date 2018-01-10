@@ -1,17 +1,41 @@
-import { contract } from './contracts';
+import { contract } from './utils';
+import Component from './Component';
 import Account from './Account';
+import Parameterizer from './Parameterizer';
+import Listing from './Listing';
 
-class Registry {
+class Registry extends Component {
   constructor(address, provider) {
+    super(provider);
+
     this.address = address;
-    this.provider = provider;
     this.contract = contract('Registry', address, provider);
   }
 
-  async getAccount(address) {
+  async createListing(name, amount, _sendObj = {}) {
+    await this.send(this.contract.methods.apply, name, amount, _sendObj);
+
+    return new Listing(name, this);
+  }
+
+  getListing(name) {
+    return new Listing(name, this);
+  }
+
+  hasListing(name) {
+    return this.getListing(name).exists();
+  }
+
+  async getAccount(owner) {
     let tokenAddress = await this.contract.methods.token().call();
 
-    return new Account(address, tokenAddress, this.provider);
+    return new Account(owner, tokenAddress, this.provider);
+  }
+
+  async getParameterizer() {
+    let parameterizerAddress = await this.contract.methods.parameterizer().call();
+
+    return new Parameterizer(parameterizerAddress, this.provider);
   }
 }
 
