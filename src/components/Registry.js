@@ -2,7 +2,7 @@ import { contract } from './utils';
 import Component from './Component';
 import Account from './Account';
 import Parameterizer from './Parameterizer';
-import Listing from './Listing';
+import ListingFactory from './ListingFactory';
 
 class Registry extends Component {
   constructor(address, provider) {
@@ -10,20 +10,21 @@ class Registry extends Component {
 
     this.address = address;
     this.contract = contract('Registry', address, provider);
+    this._listingFactory = new ListingFactory(provider, this.contract);
   }
 
   async createListing(name, amount, _sendObj = {}) {
     await this.send(this.contract.methods.apply, name, amount, _sendObj);
 
-    return new Listing(name, this);
+    return await this.getListing(name);
   }
 
-  getListing(name) {
-    return new Listing(name, this);
+  async getListing(name) {
+    return await this._listingFactory.create(name);
   }
 
-  hasListing(name) {
-    return this.getListing(name).exists();
+  async hasListing(name) {
+    return await (await this.getListing(name)).exists();
   }
 
   async getAccount(owner) {

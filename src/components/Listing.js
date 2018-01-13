@@ -1,72 +1,68 @@
 import { keccak256 } from 'js-sha3';
 import { stubAddress } from './utils';
 import Component from './Component';
-import Challenge from './Challenge';
+import ChallengeFactory from './ChallengeFactory';
+
+const OWNER = 'owner';
+const APPLICATION_EXPIRY = 'applicationExpiry';
+const WHITELISTED = 'whitelisted';
+const UNSTAKED_DEPOSIT = 'unstakedDeposit';
+const CHALLENGE_ID = 'challengeID';
 
 class Listing extends Component {
-  constructor(name, registry) {
-    super(registry.provider);
+  constructor(name, rawDataFromContract, provider, contract) {
+    super(provider);
 
     this.name = name;
-    this.registry = registry;
-    this.contract = registry.contract;
+    this._rawData = rawDataFromContract;
+    this.contract = contract;
+    this._challengeFactory = new ChallengeFactory(provider, contract);
   }
 
-  async getOwner() {
-    let data = await this._getData();
-
-    return data['owner'] === stubAddress() ? null : data['owner'];
+  getOwner() {
+    return this._property(OWNER) === stubAddress() ? null : this._property(OWNER);
   }
 
-  async isWhitelisted() {
-    let data = await this._getData();
-
-    return data['whitelisted'] === true;
+  isWhitelisted() {
+    return this._property(WHITELISTED) === true;
   }
 
-  async getChallenge() {
-    let data = await this._getData();
-
-    return new Challenge(data['challengeID'], this.registry);
+  getChallenge() {
+    return this._challengeFactory.create(this._property(CHALLENGE_ID));
   }
 
-  async hasChallenge() {
-    let data = await this._getData();
-
-    return data['challengeID'] !== '0';
+  hasChallenge() {
+    return this._property(CHALLENGE_ID) !== '0';
   }
 
-  async expiresAt() {
-    let data = await this._getData();
-
-    return parseInt(data['applicationExpiry'], 10);
+  expiresAt() {
+    return parseInt(this._property(APPLICATION_EXPIRY), 10);
   }
 
-  async getDeposit() {
-    let data = await this._getData();
-
-    return parseInt(data['unstakedDeposit'], 10);
+  getDeposit() {
+    return parseInt(this._property(UNSTAKED_DEPOSIT), 10);
   }
 
-  async exists() {
+  exists() {
     // Listing cannot exists without owner, therefore we use this to validate existence
-    return await this.contract.methods.appWasMade(this.name).call();
+    return this._rawData['exists'];
   }
 
-  async getData() {
+  getData() {
     return {
       'name': this.name,
-      'owner': await this.getOwner(),
-      'isWhitelisted': await this.isWhitelisted(),
-      'exists': await this.exists(),
-      'deposit': await this.getDeposit()
+      'owner': this.getOwner(),
+      'isWhitelisted': this.isWhitelisted(),
+      'exists': this.exists(),
+      'deposit': this.getDeposit()
     };
   }
 
+  // TODO: предусмотреть эксепшен, т.к. данные точно уже неактуальны после этого вызова
   async challenge(sendObj = {}) {
     let challengeId = await this.send(this.contract.methods.challenge, this.name, sendObj);
 
-    return new Challenge(challengeId);
+    return this._challengeFactory.create(challengeId);
   }
 
   deposit(amount, sendObj = {}) {
@@ -81,9 +77,8 @@ class Listing extends Component {
     return this.send(this.contract.methods.exit, this.name, sendObj);
   }
 
-  /* Returns a raw data */
-  _getData() {
-    return this.contract.methods.listings(Listing.hashName(this.name)).call();
+  _property(propName) {
+    return this._rawData[propName];
   }
 
   static hashName(name) {

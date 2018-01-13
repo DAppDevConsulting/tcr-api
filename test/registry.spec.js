@@ -1,4 +1,4 @@
-import { Registry, Listing } from '../lib/tcr';
+import { Registry } from '../lib/tcr';
 import Web3 from 'web3';
 
 const assert = require('assert');
@@ -28,16 +28,17 @@ describe('TCR', () => {
 
     it('can pre-approve tokens', async () => {
       let amount = '20';
+
       await account.approveTokens(registry.address, amount);
 
       assert.strictEqual(amount, await account.getApprovedTokens(registry.address));
-    })
+    });
   });
 
   describe('Parameterizer', () => {
     it('should return any string param', async () => {
       assert.strictEqual(typeof await parameterizer.get('minDeposit'), 'string');
-    })
+    });
   });
 
   describe('Registry', () => {
@@ -47,8 +48,9 @@ describe('TCR', () => {
       let amount = 0;
 
       /* Calculating tokens amount for applying pre-approving */
-      minDeposit = parseInt(await parameterizer.get('minDeposit'));
+      minDeposit = parseInt(await parameterizer.get('minDeposit'), 10);
       let addition = minDeposit * Number(Math.random(0.2).toFixed()); // Addition from 0% to 20% to minDeposit
+
       stake = minDeposit + addition;
       amount += stake;
 
@@ -59,43 +61,43 @@ describe('TCR', () => {
       account.approveTokens(registry.address, amount);
 
       /* Approving min deposit tokens to extra account */
-      accountExtra.approveTokens(registry.address, minDeposit * 10)
+      accountExtra.approveTokens(registry.address, minDeposit * 10);
     });
 
     it('should be able to create a listing', async () => {
-      listingName = Math.random(10000).toString();   // Pseudo random listing name to avoid collisions
+      listingName = Math.random(10000).toString();// Pseudo random listing name to avoid collisions
       await registry.createListing(listingName, stake, {gas: 150000});
 
-      assert(await registry.hasListing(listingName))
+      assert(await registry.hasListing(listingName));
     });
 
     it('should be able to increase and decrease listing deposit', async () => {
-      let listing = registry.getListing(listingName);
-      let deposit = await listing.getDeposit();
+      let listing = await registry.getListing(listingName);
+      let deposit = listing.getDeposit();
 
       await listing.deposit(depositAmount);
-      assert.strictEqual(await listing.getDeposit(), deposit + depositAmount);
+      assert.strictEqual(listing.getDeposit(), deposit + depositAmount);
 
       await listing.withdraw(depositAmount);
-      assert.strictEqual(await listing.getDeposit(), deposit);
+      assert.strictEqual(listing.getDeposit(), deposit);
     });
 
     it('should be able to challenge listing', async () => {
-      let listing = registry.getListing(listingName);
+      let listing = await registry.getListing(listingName);
 
-      assert(!await listing.hasChallenge());
+      assert(!listing.hasChallenge());
     });
 
     // @todo: not ready yet, need to implement challenge functionality
     it('should be able to remove listing (quit from registry)', async () => {
-      let listing = registry.getListing(listingName);
+      let listing = await registry.getListing(listingName);
 
       // Checking that the listing is in registry and whitelisted
-      assert(await listing.exists());
-      assert(await listing.isWhitelisted());
+      assert(listing.exists());
+      assert(listing.isWhitelisted());
 
       await listing.remove();
-      assert(!await listing.exists());
-    })
+      assert(!listing.exists());
+    });
   });
 });

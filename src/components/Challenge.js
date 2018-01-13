@@ -1,13 +1,12 @@
-import { contract } from './utils';
 import Component from './Component';
 
 class Challenge extends Component {
-  constructor(id, registry) {
-    super(registry.provider);
+  constructor(id, rawDataFromContract, provider, contract) {
+    super(provider);
 
     this.id = id;
-    this.registry = registry;
-    this.contract = registry.contract;
+    this._rawData = rawDataFromContract;
+    this.contract = contract;
   }
 
   getWinnerReward() {
