@@ -1,5 +1,5 @@
-import { contract } from './utils';
 import Component from './Component';
+import PLCRVoting from './PLCRVoting';
 
 class Challenge extends Component {
   constructor(id, registry) {
@@ -7,11 +7,17 @@ class Challenge extends Component {
 
     this.id = id;
     this.registry = registry;
-    this.contract = registry.contract;
+    // this.contract = registry.contract;
   }
 
   getWinnerReward() {
-    return this.contract.methods.challengeWinnerReward(this.id).call();
+    return this.registry.contract.methods.challengeWinnerReward(this.id).call();
+  }
+
+  async getPoll() {
+    let voting = await this.registry.getPLCRVoting();
+
+    return voting.getPoll(this.id, voting);
   }
 }
 

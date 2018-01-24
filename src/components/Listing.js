@@ -66,7 +66,7 @@ class Listing extends Component {
   async challenge(sendObj = {}) {
     let challengeId = await this.send(this.contract.methods.challenge, this.name, sendObj);
 
-    return new Challenge(challengeId);
+    return new Challenge(challengeId, this.registry);
   }
 
   deposit(amount, sendObj = {}) {
