@@ -8,6 +8,7 @@ class Listing extends Component {
     super(registry.provider);
 
     this.name = name;
+    this.hash = Listing.hashName(name);
     this.registry = registry;
     this.contract = registry.contract;
   }
@@ -64,9 +65,9 @@ class Listing extends Component {
   }
 
   async challenge(sendObj = {}) {
-    let challengeId = await this.send(this.contract.methods.challenge, this.name, sendObj);
+    await this.send(this.contract.methods.challenge, this.name, sendObj);
 
-    return new Challenge(challengeId, this.registry);
+    return this.getChallenge();
   }
 
   deposit(amount, sendObj = {}) {
