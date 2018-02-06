@@ -22,7 +22,7 @@ class Poll extends Component {
   async getCommitEndDate() {
     let data = await this._getData();
 
-    return parseInt(data['commitEndDate']);
+    return parseInt(data['commitEndDate'], 10);
   }
 
   async getCommitRemainingTime() {
@@ -36,7 +36,7 @@ class Poll extends Component {
   async getRevealEndDate() {
     let data = await this._getData();
 
-    return parseInt(data['revealEndDate']);
+    return parseInt(data['revealEndDate'], 10);
   }
 
   /*
@@ -49,35 +49,35 @@ class Poll extends Component {
       return 'reveal';
     } else if (await this.isEnded()) {
       return 'ended';
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   async getVoteQuorum() {
     let data = await this._getData();
 
-    return parseInt(data['voteQuorum']);
+    return parseInt(data['voteQuorum'], 10);
   }
 
   async getVotesFor() {
     let data = await this._getData();
 
-    return parseInt(data['votesFor']);
+    return parseInt(data['votesFor'], 10);
   }
 
   async getVotesAgainst() {
     let data = await this._getData();
 
-    return parseInt(data['votesAgainst']);
+    return parseInt(data['votesAgainst'], 10);
   }
 
-  async isCommitStage() {
-    return await this.getCommitRemainingTime() > 0;
+  isCommitStage() {
+    return this.contract.methods.commitStageActive(this.id).call();
   }
 
-  async isRevealStage() {
-    return await this.getRevealRemainingTime() > 0 && !await this.isCommitStage();
+  isRevealStage() {
+    return this.contract.methods.revealStageActive(this.id).call();
   }
 
   isEnded() {
@@ -96,11 +96,11 @@ class Poll extends Component {
       'voteQuorum': await this.getVoteQuorum(),
       'votesFor': await this.getVotesFor(),
       'votesAgainst': await this.getVotesAgainst()
-    }
+    };
   }
 
   async getPointForInsert(voter, tokensAmount) {
-    return parseInt(await this.contract.methods.getInsertPointForNumTokens(voter, tokensAmount).call());
+    return parseInt(await this.contract.methods.getInsertPointForNumTokens(voter, tokensAmount).call(), 10);
   }
 
   _getData() {

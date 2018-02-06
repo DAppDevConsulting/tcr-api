@@ -28,7 +28,7 @@ class Listing extends Component {
   async getChallenge() {
     let data = await this._getData();
 
-    return new Challenge(data['challengeID'], this.registry);
+    return new Challenge(data['challengeID'], this);
   }
 
   async hasChallenge() {
@@ -68,6 +68,10 @@ class Listing extends Component {
     await this.send(this.contract.methods.challenge, this.name, sendObj);
 
     return this.getChallenge();
+  }
+
+  updateStatus(sendObj = {}) {
+    return this.send(this.contract.methods.updateStatus, this.name, sendObj);
   }
 
   deposit(amount, sendObj = {}) {

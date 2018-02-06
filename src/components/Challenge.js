@@ -1,23 +1,52 @@
 import Component from './Component';
-import PLCRVoting from './PLCRVoting';
 
 class Challenge extends Component {
-  constructor(id, registry) {
-    super(registry.provider);
+  constructor(id, listing) {
+    super(listing.provider);
 
     this.id = id;
-    this.registry = registry;
-    // this.contract = registry.contract;
+    this.listing = listing;
+    this.registry = listing.registry;
+    this.contract = listing.contract;
   }
 
-  getWinnerReward() {
-    return this.registry.contract.methods.challengeWinnerReward(this.id).call();
+  getWinnerPartyReward() {
+    return this.contract.methods.challengeWinnerReward(this.id).call();
+  }
+
+  canBeResolved() {
+    return this.contract.methods.challengeCanBeResolved(this.listing.name).call();
+  }
+
+  getVoterReward(voter, salt) {
+    return this.contract.methods.voterReward(voter, this.id, salt).call();
+  }
+
+  claimReward(salt, sendObj = {}) {
+    return this.send(this.contract.methods.claimReward, this.id, salt, sendObj);
   }
 
   async getPoll() {
     let voting = await this.registry.getPLCRVoting();
 
     return voting.getPoll(this.id, voting);
+  }
+
+  async isResolved() {
+    let data = await this._getData();
+
+    return data['resolved'];
+  }
+
+  async getData() {
+    return {
+      id: this.id,
+      isResolved: await this.isResolved()
+    };
+  }
+
+  _getData() {
+    return this.contract.methods.challenges(this.id).call();
   }
 }
 

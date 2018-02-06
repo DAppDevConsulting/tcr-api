@@ -10,6 +10,7 @@ class Component {
   send(fn, ...args) {
     // Detecting if last argument is a web3 send object
     let sendObject = (typeof args[args.length - 1] === 'object') ? args.pop() : {};
+
     sendObject.from = this.getSender(sendObject);
 
     return fn(...args).send(sendObject);

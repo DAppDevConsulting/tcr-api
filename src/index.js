@@ -1,4 +1,4 @@
-import { Account, Registry, Listing, PLCRVoting } from 'components';
+import { Account, Registry, Listing, PLCRVoting } from './components';
 
 export { Account };
 export { Registry };

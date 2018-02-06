@@ -1,8 +1,8 @@
-import { keccak256 } from 'js-sha3';
-import { contract } from "./utils"
+import web3Utils from 'web3-utils';
+import { contract } from './utils';
 
-import Poll from './Poll'
-import Component from './Component'
+import Poll from './Poll';
+import Component from './Component';
 
 class PLCRVoting extends Component {
   constructor(address, provider) {
@@ -25,11 +25,11 @@ class PLCRVoting extends Component {
   }
 
   async getTokenBalance(address) {
-    return parseInt(await this.contract.methods.voteTokenBalance(address).call());
+    return parseInt(await this.contract.methods.voteTokenBalance(address).call(), 10);
   }
 
   static makeSecretHash(option, salt) {
-    return '0x' + keccak256(option.toString() + salt.toString());
+    return web3Utils.soliditySha3(option, salt);
   }
 }
 
