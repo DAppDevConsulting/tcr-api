@@ -1,7 +1,7 @@
 {
   "name": "ethereum-tcr-api",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.2.2",
   "description": "API for Ethereum Token Curated Registries",
   "main": "lib/tcr.js",
   "scripts": {
