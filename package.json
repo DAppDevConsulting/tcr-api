@@ -7,8 +7,8 @@
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --require babel-core/register --require babel-polyfill --colors ./test/*.spec.js",
-    "test:watch": "mocha --require babel-core/register --require babel-polyfill --timeout 15000 --colors -w ./test/*.spec.js"
+    "test": "mocha --require babel-core/register --require babel-polyfill --colors --timeout 10000 ./test/*.spec.js",
+    "test:watch": "mocha --require babel-core/register --require babel-polyfill --timeout 25000 --colors -w ./test/*.spec.js"
   },
   "keywords": [
     "tcr",
@@ -27,10 +27,10 @@
     "eslint-loader": "^1.9.0",
     "mocha": "^4.0.1",
     "webpack": "^3.10.0",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "web3": "^1.0.0-beta.27"
   },
   "dependencies": {
-    "js-sha3": "^0.7.0",
-    "web3": "^1.0.0-beta.27"
+    "web3-utils": "^1.0.0-beta.27"
   }
 }

@@ -31,6 +31,12 @@ class Listing extends Component {
     return new Challenge(data['challengeID'], this);
   }
 
+  async getChallengeId() {
+    let data = await this._getData();
+
+    return data['challengeID'];
+  }
+
   async hasChallenge() {
     let data = await this._getData();
 
