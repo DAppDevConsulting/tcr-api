@@ -19,10 +19,34 @@ class Listing extends Component {
     return data['owner'] === stubAddress() ? null : data['owner'];
   }
 
+  async getStageStatus() {
+    let challenge = await this.getChallenge();
+    let poll = await challenge.getPoll();
+
+    if (await this.hasChallenge() && await poll.exists()) {
+      switch (await poll.getCurrentStage()) {
+        case 'commit':
+          return 'VoteCommit';
+        case 'reveal':
+          return 'VoteReveal';
+      }
+    }
+
+    if (this.canBeWhitelisted() || challenge.canBeResolved()) {
+      return 'NeedRefresh';
+    }
+
+    return null;
+  }
+
   async isWhitelisted() {
     let data = await this._getData();
 
     return data['whitelisted'] === true;
+  }
+
+  canBeWhitelisted() {
+    return this.contract.methods.canBeWhitelisted(this.name).call();
   }
 
   async getChallenge() {
@@ -55,9 +79,9 @@ class Listing extends Component {
     return parseInt(data['unstakedDeposit'], 10);
   }
 
-  async exists() {
+  exists() {
     // Listing cannot exists without owner, therefore we use this to validate existence
-    return await this.contract.methods.appWasMade(this.name).call();
+    return this.contract.methods.appWasMade(this.name).call();
   }
 
   async getData() {

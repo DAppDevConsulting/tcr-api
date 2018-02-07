@@ -148,6 +148,8 @@ describe('TCR', () => {
       let poll = await challenge.getPoll();
       let secretHash = PLCRVoting.makeSecretHash(option, salt);
 
+      assert.strictEqual(await listing.getStageStatus(), 'VoteCommit');
+
       assert(await poll.isCommitStage());
 
       await poll.commitVote(secretHash, depositAmount, {from: accountExtra.owner, gas: 150000});
@@ -161,10 +163,11 @@ describe('TCR', () => {
       await plcr.requestVotingRights(20000, {from: accounts[3]});
 
       assert(!await poll.isCommitStage() && await poll.isRevealStage());
+      assert.strictEqual(await listing.getStageStatus(), 'VoteReveal');
 
       await poll.revealVote(option, salt, {from: accountExtra.owner, gas: 150000});
 
-      await sleep((await poll.getCommitRemainingTime()) + 1);
+      await sleep((await poll.getRevealRemainingTime()) + 1);
     });
 
     it('should display the correct number of votes after reveal phase', async () => {
@@ -180,6 +183,7 @@ describe('TCR', () => {
 
       // Just a stub to mine a new block with new timestamp
       await plcr.requestVotingRights(20000, {from: accounts[2]});
+      assert.strictEqual(await listing.getStageStatus(), 'NeedRefresh');
 
       await listing.updateStatus({gas: 150000});
 
