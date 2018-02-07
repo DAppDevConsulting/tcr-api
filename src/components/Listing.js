@@ -32,7 +32,7 @@ class Listing extends Component {
       }
     }
 
-    if (this.canBeWhitelisted() || challenge.canBeResolved()) {
+    if (await this.canBeWhitelisted() || await challenge.canBeResolved()) {
       return 'NeedRefresh';
     }
 

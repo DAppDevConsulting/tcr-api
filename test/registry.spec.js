@@ -73,9 +73,10 @@ describe('TCR', () => {
     });
 
     it('should be able to create a listing', async () => {
-      await registry.createListing(listingName, stake, {gas: 150000});
+      let listing = await registry.createListing(listingName, stake, {gas: 150000});
 
       assert(await registry.hasListing(listingName));
+      assert.strictEqual(await listing.getStageStatus(), null);
     });
 
     it('should be able to increase and decrease listing deposit', async () => {
