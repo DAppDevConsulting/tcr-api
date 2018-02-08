@@ -73,11 +73,11 @@ class Poll extends Component {
   }
 
   isCommitStage() {
-    return this.contract.methods.commitStageActive(this.id).call();
+    return this.contract.methods.commitPeriodActive(this.id).call();
   }
 
   isRevealStage() {
-    return this.contract.methods.revealStageActive(this.id).call();
+    return this.contract.methods.revealPeriodActive(this.id).call();
   }
 
   isEnded() {

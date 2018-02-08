@@ -1,17 +1,17 @@
 [
   {
-    "constant": false,
+    "constant": true,
     "inputs": [
       {
         "name": "self",
         "type": "AttributeStore.Data storage"
       },
       {
-        "name": "UUID",
+        "name": "_UUID",
         "type": "bytes32"
       },
       {
-        "name": "attrName",
+        "name": "_attrName",
         "type": "string"
       }
     ],
@@ -23,6 +23,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -33,21 +34,22 @@
         "type": "AttributeStore.Data storage"
       },
       {
-        "name": "UUID",
+        "name": "_UUID",
         "type": "bytes32"
       },
       {
-        "name": "attrName",
+        "name": "_attrName",
         "type": "string"
       },
       {
-        "name": "attrVal",
+        "name": "_attrVal",
         "type": "uint256"
       }
     ],
-    "name": "attachAttribute",
+    "name": "setAttribute",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

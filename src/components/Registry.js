@@ -13,18 +13,18 @@ class Registry extends Component {
     this.contract = contract('Registry', address, provider);
   }
 
-  async createListing(name, amount, _sendObj = {}) {
-    await this.send(this.contract.methods.apply, name, amount, _sendObj);
+  async createListing(hash, amount, _sendObj = {}) {
+    await this.send(this.contract.methods.apply, hash, amount, 'sad', _sendObj);
 
-    return new Listing(name, this);
+    return new Listing(hash, this);
   }
 
-  getListing(name) {
-    return new Listing(name, this);
+  getListing(hash) {
+    return new Listing(hash, this);
   }
 
-  hasListing(name) {
-    return this.getListing(name).exists();
+  hasListing(hash) {
+    return this.getListing(hash).exists();
   }
 
   async getPLCRVoting() {

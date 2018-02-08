@@ -1,4 +1,4 @@
-import { Registry, PLCRVoting } from '../lib/tcr';
+import { Registry, Listing, PLCRVoting } from '../lib/tcr';
 import Web3 from 'web3';
 
 const assert = require('assert');
@@ -14,7 +14,7 @@ const sleep = (seconds) => (new Promise((resolve, reject) => setTimeout(resolve,
 const getRandInt = (min, max) => (Math.floor(Math.random() * (max - min)) + min);
 
 describe('TCR', () => {
-  let listingName;
+  let listingHash;
 
   before(async () => {
     // Settings the default address in case it's empty
@@ -27,7 +27,7 @@ describe('TCR', () => {
     accountExtra = await registry.getAccount(accounts[1]);
     parameterizer = await registry.getParameterizer();
 
-    listingName = Math.random(10000).toString(); // Pseudo random listing name to avoid collisions
+    listingHash = Listing.hashName(Math.random(10000).toString()); // Pseudo random listing name to avoid collisions
   });
 
   describe('Account', () => {
@@ -73,14 +73,16 @@ describe('TCR', () => {
     });
 
     it('should be able to create a listing', async () => {
-      let listing = await registry.createListing(listingName, stake, {gas: 150000});
+      let listing = await registry.createListing(listingHash, stake, {gas: 150000});
 
-      assert(await registry.hasListing(listingName));
+      console.log(await listing.getData());
+
+      assert(await registry.hasListing(listingHash));
       assert.strictEqual(await listing.getStageStatus(), null);
     });
 
     it('should be able to increase and decrease listing deposit', async () => {
-      let listing = registry.getListing(listingName);
+      let listing = registry.getListing(listingHash);
       let deposit = await listing.getDeposit();
 
       await listing.deposit(depositAmount);
@@ -91,7 +93,7 @@ describe('TCR', () => {
     });
 
     it('should be able to challenge listing', async () => {
-      let listing = registry.getListing(listingName);
+      let listing = registry.getListing(listingHash);
 
       assert(!await listing.hasChallenge());
 
@@ -103,7 +105,7 @@ describe('TCR', () => {
     // @todo: not ready yet, need to implement challenge functionality
     it('should be able to remove listing (quit from registry)', async () => {
       return;
-      let listing = registry.getListing(listingName);
+      let listing = registry.getListing(listingHash);
 
       // Checking that the listing is in registry and whitelisted
       assert(await listing.exists());
@@ -118,7 +120,7 @@ describe('TCR', () => {
     let listing, challenge, plcr, salt, option, depositAmount;
 
     before(async () => {
-      listing = registry.getListing(listingName);
+      listing = registry.getListing(listingHash);
       challenge = await listing.getChallenge();
       plcr = await registry.getPLCRVoting();
 
@@ -161,7 +163,7 @@ describe('TCR', () => {
       let poll = await challenge.getPoll();
 
       // Just a stub to mine a new block with new timestamp
-      await plcr.requestVotingRights(20000, {from: accounts[3]});
+      await plcr.requestVotingRights(20000, {from: accounts[0]});
 
       assert(!await poll.isCommitStage() && await poll.isRevealStage());
       assert.strictEqual(await listing.getStageStatus(), 'VoteReveal');
@@ -183,7 +185,7 @@ describe('TCR', () => {
       let poll = await challenge.getPoll();
 
       // Just a stub to mine a new block with new timestamp
-      await plcr.requestVotingRights(20000, {from: accounts[2]});
+      await plcr.requestVotingRights(20000, {from: accounts[0]});
       assert.strictEqual(await listing.getStageStatus(), 'NeedRefresh');
 
       await listing.updateStatus({gas: 150000});

@@ -1,14 +1,13 @@
-import { keccak256 } from 'js-sha3';
+import web3Utils from 'web3-utils';
 import { stubAddress } from './utils';
 import Component from './Component';
 import Challenge from './Challenge';
 
 class Listing extends Component {
-  constructor(name, registry) {
+  constructor(hash, registry) {
     super(registry.provider);
 
-    this.name = name;
-    this.hash = Listing.hashName(name);
+    this.hash = hash;
     this.registry = registry;
     this.contract = registry.contract;
   }
@@ -46,7 +45,7 @@ class Listing extends Component {
   }
 
   canBeWhitelisted() {
-    return this.contract.methods.canBeWhitelisted(this.name).call();
+    return this.contract.methods.canBeWhitelisted(this.hash).call();
   }
 
   async getChallenge() {
@@ -81,12 +80,11 @@ class Listing extends Component {
 
   exists() {
     // Listing cannot exists without owner, therefore we use this to validate existence
-    return this.contract.methods.appWasMade(this.name).call();
+    return this.contract.methods.appWasMade(this.hash).call();
   }
 
   async getData() {
     return {
-      'name': this.name,
       'owner': await this.getOwner(),
       'isWhitelisted': await this.isWhitelisted(),
       'exists': await this.exists(),
@@ -95,34 +93,34 @@ class Listing extends Component {
   }
 
   async challenge(sendObj = {}) {
-    await this.send(this.contract.methods.challenge, this.name, sendObj);
+    await this.send(this.contract.methods.challenge, this.hash, 'wow', sendObj);
 
     return this.getChallenge();
   }
 
   updateStatus(sendObj = {}) {
-    return this.send(this.contract.methods.updateStatus, this.name, sendObj);
+    return this.send(this.contract.methods.updateStatus, this.hash, sendObj);
   }
 
   deposit(amount, sendObj = {}) {
-    return this.send(this.contract.methods.deposit, this.name, amount, sendObj);
+    return this.send(this.contract.methods.deposit, this.hash, amount, sendObj);
   }
 
   withdraw(amount, sendObj = {}) {
-    return this.send(this.contract.methods.withdraw, this.name, amount, sendObj);
+    return this.send(this.contract.methods.withdraw, this.hash, amount, sendObj);
   }
 
   remove(sendObj = {}) {
-    return this.send(this.contract.methods.exit, this.name, sendObj);
+    return this.send(this.contract.methods.exit, this.hash, sendObj);
   }
 
   /* Returns a raw data */
   _getData() {
-    return this.contract.methods.listings(Listing.hashName(this.name)).call();
+    return this.contract.methods.listings(this.hash).call();
   }
 
   static hashName(name) {
-    return '0x' + keccak256(name);
+    return web3Utils.keccak256(name);
   }
 }
 

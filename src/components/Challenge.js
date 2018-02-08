@@ -14,8 +14,12 @@ class Challenge extends Component {
     return this.contract.methods.challengeWinnerReward(this.id).call();
   }
 
-  canBeResolved() {
-    return this.contract.methods.challengeCanBeResolved(this.listing.name).call();
+  exists() {
+    return this.contract.methods.challengeExists(this.listing.hash).call();
+  }
+
+  async canBeResolved() {
+    return await this.exists() && await this.contract.methods.challengeCanBeResolved(this.listing.hash).call();
   }
 
   getVoterReward(voter, salt) {

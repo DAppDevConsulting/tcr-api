@@ -3,39 +3,27 @@
     "constant": true,
     "inputs": [
       {
-        "name": "_domain",
-        "type": "string"
+        "name": "_listingHash",
+        "type": "bytes32"
       }
     ],
-    "name": "appWasMade",
+    "name": "isWhitelisted",
     "outputs": [
       {
-        "name": "exists",
+        "name": "whitelisted",
         "type": "bool"
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "_domain",
-        "type": "string"
-      }
-    ],
-    "name": "updateStatus",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_domain",
-        "type": "string"
+        "name": "_listingHash",
+        "type": "bytes32"
       },
       {
         "name": "_amount",
@@ -45,31 +33,69 @@
     "name": "withdraw",
     "outputs": [],
     "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_challengeID",
-        "type": "uint256"
-      }
-    ],
-    "name": "challengeWinnerReward",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "_domain",
+        "name": "_listingHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "exit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "challengeExists",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      },
+      {
+        "name": "_data",
         "type": "string"
       }
     ],
@@ -81,6 +107,59 @@
       }
     ],
     "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "version",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "canBeWhitelisted",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "challengeCanBeResolved",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -98,23 +177,62 @@
     "name": "claimReward",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "_domain",
-        "type": "string"
+        "name": "_listingHash",
+        "type": "bytes32"
       },
       {
         "name": "_amount",
         "type": "uint256"
+      },
+      {
+        "name": "_data",
+        "type": "string"
       }
     ],
-    "name": "deposit",
+    "name": "apply",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "updateStatus",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_listingHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "appWasMade",
+    "outputs": [
+      {
+        "name": "exists",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -132,18 +250,6 @@
         "type": "uint256"
       },
       {
-        "name": "voting",
-        "type": "address"
-      },
-      {
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "name": "challengeID",
-        "type": "uint256"
-      },
-      {
         "name": "challenger",
         "type": "address"
       },
@@ -156,11 +262,12 @@
         "type": "uint256"
       },
       {
-        "name": "winningTokens",
+        "name": "totalTokens",
         "type": "uint256"
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -183,6 +290,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -209,41 +317,7 @@
       }
     ],
     "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_domain",
-        "type": "string"
-      }
-    ],
-    "name": "isWhitelisted",
-    "outputs": [
-      {
-        "name": "whitelisted",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_domain",
-        "type": "string"
-      },
-      {
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "apply",
-    "outputs": [],
-    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -278,78 +352,26 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
     "inputs": [
       {
-        "name": "_domain",
-        "type": "string"
-      }
-    ],
-    "name": "canBeWhitelisted",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_domain",
-        "type": "string"
-      }
-    ],
-    "name": "challengeCanBeResolved",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_termDate",
+        "name": "_challengeID",
         "type": "uint256"
       }
     ],
-    "name": "isExpired",
-    "outputs": [
-      {
-        "name": "expired",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_domain",
-        "type": "string"
-      }
-    ],
-    "name": "challengeExists",
+    "name": "determineReward",
     "outputs": [
       {
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -363,19 +385,7 @@
       }
     ],
     "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_domain",
-        "type": "string"
-      }
-    ],
-    "name": "exit",
-    "outputs": [],
-    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -389,6 +399,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -402,6 +413,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -420,6 +432,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "constructor"
   },
   {
@@ -427,13 +440,18 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       },
       {
         "indexed": false,
         "name": "deposit",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "data",
+        "type": "string"
       }
     ],
     "name": "_Application",
@@ -444,8 +462,8 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -456,6 +474,11 @@
         "indexed": false,
         "name": "pollID",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "data",
+        "type": "string"
       }
     ],
     "name": "_Challenge",
@@ -466,8 +489,8 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -488,8 +511,8 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -510,11 +533,11 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       }
     ],
-    "name": "_NewDomainWhitelisted",
+    "name": "_NewListingWhitelisted",
     "type": "event"
   },
   {
@@ -522,8 +545,8 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       }
     ],
     "name": "_ApplicationRemoved",
@@ -534,8 +557,8 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "domain",
-        "type": "string"
+        "name": "listingHash",
+        "type": "bytes32"
       }
     ],
     "name": "_ListingRemoved",
