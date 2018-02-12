@@ -14,6 +14,12 @@ class Challenge extends Component {
   }
 
   async canBeResolved() {
+    let isResolved = await this.isResolved();
+
+    if (isResolved) {
+      return false;
+    }
+
     let poll = await this.getPoll();
 
     return await poll.exists() ? await poll.isEnded() : false;
