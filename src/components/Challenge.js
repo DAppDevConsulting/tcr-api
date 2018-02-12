@@ -1,21 +1,22 @@
 import Component from './Component';
 
 class Challenge extends Component {
-  constructor(id, listing) {
-    super(listing.provider);
+  constructor(id, registry) {
+    super(registry.provider);
 
     this.id = id;
-    this.listing = listing;
-    this.registry = listing.registry;
-    this.contract = listing.contract;
+    this.registry = registry;
+    this.contract = registry.contract;
   }
 
   getWinnerPartyReward() {
     return this.contract.methods.challengeWinnerReward(this.id).call();
   }
 
-  canBeResolved() {
-    return this.contract.methods.challengeCanBeResolved(this.listing.name).call();
+  async canBeResolved() {
+    let poll = await this.getPoll();
+
+    return await poll.exists() ? await poll.isEnded() : false;
   }
 
   getVoterReward(voter, salt) {

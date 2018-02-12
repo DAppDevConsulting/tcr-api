@@ -4,6 +4,7 @@ import Account from './Account';
 import Parameterizer from './Parameterizer';
 import Listing from './Listing';
 import PLCRVoting from './PLCRVoting';
+import Challenge from './Challenge';
 
 class Registry extends Component {
   constructor(address, provider) {
@@ -21,6 +22,10 @@ class Registry extends Component {
 
   getListing(name) {
     return new Listing(name, this);
+  }
+
+  getChallenge(id) {
+    return new Challenge(id, this);
   }
 
   hasListing(name) {
