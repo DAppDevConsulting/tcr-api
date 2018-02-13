@@ -1,13 +1,12 @@
 import Component from './Component';
 
 class Challenge extends Component {
-  constructor(id, listing) {
-    super(listing.provider);
+  constructor(id, registry) {
+    super(registry.provider);
 
     this.id = id;
-    this.listing = listing;
-    this.registry = listing.registry;
-    this.contract = listing.contract;
+    this.registry = registry;
+    this.contract = registry.contract;
   }
 
   getWinnerPartyReward() {
@@ -19,7 +18,15 @@ class Challenge extends Component {
   }
 
   async canBeResolved() {
-    return await this.exists() && await this.contract.methods.challengeCanBeResolved(this.listing.hash).call();
+    let isResolved = await this.isResolved();
+
+    if (isResolved) {
+      return false;
+    }
+
+    let poll = await this.getPoll();
+
+    return await poll.exists() ? await poll.isEnded() : false;
   }
 
   getVoterReward(voter, salt) {
