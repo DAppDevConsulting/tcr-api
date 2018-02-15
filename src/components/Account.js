@@ -18,8 +18,8 @@ class Account extends Component {
     return this.provider.eth.getBalance(this.owner);
   }
 
-  approveTokens(spender, amount) {
-    return this.send(this.tokenContract.methods.approve, spender, amount, {from: this.owner});
+  approveTokens(spender, amount, sendObj = {from: this.owner}) {
+    return this.send(this.tokenContract.methods.approve, spender, amount, sendObj);
   }
 
   getApprovedTokens(spender, owner = this.owner) {

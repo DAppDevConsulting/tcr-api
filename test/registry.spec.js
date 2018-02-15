@@ -195,4 +195,96 @@ describe('TCR', () => {
       await challenge.claimReward(salt, {from: accountExtra.owner, gas: 150000});
     });
   });
+
+  describe('Parameterizer', () => {
+    let param, value, option, salt, plcr, challengeId;
+
+    before(async () => {
+      param = 'minDeposit';
+      value = '400';
+      option = 1;
+      salt = 1111;
+      plcr = await parameterizer.getPLCRVoting();
+      challengeId = 0;
+
+      // Pre-approving tokens for further working
+      account.approveTokens(parameterizer.address, 1000000);
+      accountExtra.approveTokens(parameterizer.address, 1000000);
+    });
+
+    it('Should be able to propose a reparameterization', async () => {
+      let proposal = await parameterizer.createProposal(param, value, {gasLimit: 200000});
+
+      assert(proposal.exists());
+
+      assert.strictEqual(await proposal.getStageStatus(), null);
+    });
+
+    it('should be able to challenge proposal', async () => {
+      let proposal = parameterizer.getProposal(param, value);
+
+      assert(!await proposal.hasChallenge());
+
+      let challenge = await proposal.challenge({from: accountExtra.owner, gas: 400000});
+
+      assert(await proposal.hasChallenge());
+
+      challengeId = challenge.id;
+    });
+
+    it('should be able to pass PLCR voting', async () => {
+      let proposal = parameterizer.getProposal(param, value);
+      let challenge = parameterizer.getChallenge(challengeId);
+      let poll = await challenge.getPoll();
+      let secretHash = PLCRVoting.makeSecretHash(option, salt);
+      let depositAmount = 20000;
+
+      // Pre-approving tokens for further working
+      await account.approveTokens(plcr.address, 100000);
+      await accountExtra.approveTokens(plcr.address, 100000);
+      await plcr.requestVotingRights(depositAmount, {from: accountExtra.owner});
+
+      // assert.strictEqual(await proposal.getStageStatus(), 'VoteCommit');
+
+      /* Commit stage */
+      assert(await poll.isCommitStage());
+      assert.strictEqual(await proposal.getStageStatus(), 'VoteCommit');
+
+      await poll.commitVote(secretHash, depositAmount, {from: accountExtra.owner, gas: 150000});
+      await sleep((await poll.getCommitRemainingTime()) + 1);
+
+      /* Reveal stage */
+      // Just a stub to mine a new block with new timestamp
+      await plcr.requestVotingRights(20000, {from: accounts[0]});
+
+      assert(!await poll.isCommitStage() && await poll.isRevealStage());
+      assert.strictEqual(await proposal.getStageStatus(), 'VoteReveal');
+
+      await poll.revealVote(option, salt, {from: accountExtra.owner, gas: 150000});
+
+      await sleep((await poll.getRevealRemainingTime()) + 1);
+    });
+
+    it('should be able to resolve challenge and process proposal', async () => {
+      let proposal = await parameterizer.getProposal(param, value);
+      let challenge = await proposal.getChallenge();
+      let poll = await challenge.getPoll();
+
+      // Just a stub to mine a new block with new timestamp
+      await plcr.requestVotingRights(20000, {from: accounts[0]});
+
+      assert.strictEqual(await proposal.getStageStatus(), 'NeedProcess');
+
+      await proposal.process({gas: 150000});
+
+      assert(await poll.isEnded() && await challenge.isResolved());
+    });
+
+    it('should be able to receive the reward', async () => {
+      let challenge = parameterizer.getChallenge(challengeId);
+
+      await challenge.claimReward(salt, {from: accountExtra.owner, gas: 150000});
+    });
+  });
+
 });
