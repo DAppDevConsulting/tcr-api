@@ -33,7 +33,7 @@ class Listing extends Component {
     }
 
     if (await this.canBeWhitelisted() || await challenge.canBeResolved()) {
-      return 'NeedRefresh';
+      return poll.isPassed() ? 'WillBeWhitelisted' : 'WillBeRejected';
     }
 
     return null;

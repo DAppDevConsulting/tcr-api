@@ -184,7 +184,7 @@ describe('TCR', () => {
 
       // Just a stub to mine a new block with new timestamp
       await plcr.requestVotingRights(20000, {from: accounts[2]});
-      assert.strictEqual(await listing.getStageStatus(), 'NeedRefresh');
+      assert.strictEqual(await listing.getStageStatus(), 'WillBeWhitelisted');
 
       await listing.updateStatus({gas: 150000});
 

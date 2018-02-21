@@ -84,6 +84,10 @@ class Poll extends Component {
     return this.contract.methods.pollEnded(this.id).call();
   }
 
+  isPassed() {
+    return this.contract.methods.isPassed(this.id).call();
+  }
+
   exists() {
     return this.contract.methods.pollExists(this.id).call();
   }
