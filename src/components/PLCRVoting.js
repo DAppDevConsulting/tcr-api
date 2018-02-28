@@ -25,7 +25,16 @@ class PLCRVoting extends Component {
   }
 
   async getTokenBalance(address) {
+    // TODO: m.b. big number?
     return parseInt(await this.contract.methods.voteTokenBalance(address).call(), 10);
+  }
+
+  async getCommitHash(address, pollId) {
+    return await this.contract.methods.getCommitHash(address, pollId).call();
+  }
+
+  async hasBeenRevealed(address, pollId) {
+    return await this.contract.methods.hasBeenRevealed(address, pollId).call();
   }
 
   static makeSecretHash(option, salt) {

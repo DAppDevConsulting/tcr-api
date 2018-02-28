@@ -161,7 +161,7 @@ describe('TCR', () => {
       let poll = await challenge.getPoll();
 
       // Just a stub to mine a new block with new timestamp
-      await plcr.requestVotingRights(20000, {from: accounts[0]});
+      await plcr.requestVotingRights(1, {from: accounts[0]});
 
       assert(!await poll.isCommitStage() && await poll.isRevealStage());
       assert.strictEqual(await listing.getStageStatus(), 'VoteReveal');
@@ -183,8 +183,8 @@ describe('TCR', () => {
       let poll = await challenge.getPoll();
 
       // Just a stub to mine a new block with new timestamp
-      await plcr.requestVotingRights(20000, {from: accounts[0]});
-      assert.strictEqual(await listing.getStageStatus(), 'NeedRefresh');
+      await plcr.requestVotingRights(1, {from: accounts[0]});
+      assert.strictEqual(await listing.getStageStatus(), 'WillBeWhitelisted');
 
       await listing.updateStatus({gas: 150000});
 

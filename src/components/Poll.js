@@ -43,6 +43,10 @@ class Poll extends Component {
    * Returnes one of the following states: `commit`, `reveal`, `ended`
    */
   async getCurrentStage() {
+    if (!await this.exists()) {
+      return false;
+    }
+
     if (await this.isCommitStage()) {
       return 'commit';
     } else if (await this.isRevealStage()) {
@@ -82,6 +86,10 @@ class Poll extends Component {
 
   isEnded() {
     return this.contract.methods.pollEnded(this.id).call();
+  }
+
+  isPassed() {
+    return this.contract.methods.isPassed(this.id).call();
   }
 
   exists() {
