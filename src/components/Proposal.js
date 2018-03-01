@@ -18,7 +18,7 @@ class Proposal extends Component {
     return this.getChallenge();
   }
 
-  process(sendObj) {
+  process(sendObj = {}) {
     return this.send(this.contract.methods.processProposal, this.id, sendObj);
   }
 
