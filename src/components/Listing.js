@@ -22,8 +22,9 @@ class Listing extends Component {
   async getStageStatus() {
     let challenge = await this.getChallenge();
     let poll = await challenge.getPoll();
+    const poolExists = await poll.exists();
 
-    if (await this.hasChallenge() && await poll.exists()) {
+    if (await this.hasChallenge() && poolExists) {
       switch (await poll.getCurrentStage()) {
         case 'commit':
           return 'VoteCommit';
@@ -32,8 +33,11 @@ class Listing extends Component {
       }
     }
 
-    if ((await poll.exists() && await poll.isEnded()) && (await this.canBeWhitelisted() || await challenge.canBeResolved())) {
+    if ((poolExists && await poll.isEnded()) &&
+        (await this.canBeWhitelisted() || await challenge.canBeResolved())) {
       return await poll.isPassed() ? 'WillBeWhitelisted' : 'WillBeRejected';
+    } else if (await this.canBeWhitelisted()) {
+      return 'WillBeWhitelisted';
     }
 
     return null;
