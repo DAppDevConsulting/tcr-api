@@ -14,8 +14,8 @@ class Registry extends Component {
     this.contract = contract('Registry', address, provider);
   }
 
-  async createListing(hash, amount, _sendObj = {}) {
-    await this.send(this.contract.methods.apply, hash, amount, 'sad', _sendObj);
+  async createListing(hash, amount, data, _sendObj = {}) {
+    await this.send(this.contract.methods.apply, hash, amount, data, _sendObj);
 
     return new Listing(hash, this);
   }

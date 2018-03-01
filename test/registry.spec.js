@@ -73,7 +73,7 @@ describe('TCR', () => {
     });
 
     it('should be able to create a listing', async () => {
-      let listing = await registry.createListing(listingHash, stake, {gas: 150000});
+      let listing = await registry.createListing(listingHash, stake, 'wow data', {gas: 150000});
 
       assert(await registry.hasListing(listingHash));
       assert.strictEqual(await listing.getStageStatus(), null);
