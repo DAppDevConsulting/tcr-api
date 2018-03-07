@@ -36,6 +36,8 @@ class Listing extends Component {
       (await this.canBeWhitelisted() || await challenge.canBeResolved())
     ) {
       return await poll.isPassed() ? 'WillBeWhitelisted' : 'WillBeRejected';
+    } else if (await this.canBeWhitelisted()) {
+      return 'WillBeWhitelisted';
     }
 
     return null;
