@@ -53,6 +53,8 @@ class Proposal extends Component {
 
     if (await this.canBeSet() || await challenge.canBeResolved()) {
       return 'NeedProcess';
+    } else if (await this.getNowTimestamp() > await this.processBy()) {
+      return 'NeedProcessToReject';
     }
 
     return null;
@@ -78,10 +80,10 @@ class Proposal extends Component {
     return data.appExpiry;
   }
 
-  async processedBy() {
+  async processBy() {
     let data = await this._getData();
 
-    return data.processedBy;
+    return data.processBy;
   }
 
   async getDeposit() {
@@ -109,7 +111,7 @@ class Proposal extends Component {
       'value': await this.getValue(),
       'deposit': await this.getDeposit(),
       'expiresAt': await this.expiresAt(),
-      'processedBy': await this.processedBy(),
+      'processBy': await this.processBy(),
       'owner': await this.getOwner()
     };
   }
