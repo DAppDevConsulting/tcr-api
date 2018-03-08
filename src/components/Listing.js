@@ -1,4 +1,4 @@
-import { keccak256 } from 'js-sha3';
+import web3Utils from 'web3-utils';
 import { stubAddress } from './utils';
 import Component from './Component';
 import Challenge from './Challenge';
@@ -126,7 +126,7 @@ class Listing extends Component {
   }
 
   static hashName(name) {
-    return '0x' + keccak256(name);
+    return web3Utils.sha3(name);
   }
 }
 
