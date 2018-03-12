@@ -15,6 +15,12 @@ class Component {
 
     return fn(...args).send(sendObject);
   }
+
+  async getNowTimestamp() {
+    const block = await this.provider.eth.getBlock('latest');
+
+    return block ? block.timestamp : 0;
+  }
 }
 
 export default Component;
