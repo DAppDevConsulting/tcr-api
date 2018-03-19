@@ -37,6 +37,10 @@ class PLCRVoting extends Component {
     return await this.contract.methods.hasBeenRevealed(address, pollId).call();
   }
 
+  async getNumTokens(address, pollId) {
+    return await this.contract.methods.getNumTokens(address, pollId).call();
+  }
+
   static makeSecretHash(option, salt) {
     return web3Utils.soliditySha3(option, salt);
   }
