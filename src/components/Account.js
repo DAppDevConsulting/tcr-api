@@ -14,6 +14,10 @@ class Account extends Component {
     return this.tokenContract.methods.balanceOf(this.owner).call();
   }
 
+  getTokenDecimals() {
+    return this.tokenContract.methods.decimals().call();
+  }
+
   getEtherBalance() {
     return this.provider.eth.getBalance(this.owner);
   }
