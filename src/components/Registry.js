@@ -49,6 +49,17 @@ class Registry extends Component {
 
     return new Parameterizer(parameterizerAddress, this.provider);
   }
+
+  async getName() {
+    try {
+      let name = await this.contract.methods.name().call();
+
+      return name;
+    } catch (err) {
+      console.log(err);
+    }
+    return 'no name available';
+  }
 }
 
 export default Registry;
