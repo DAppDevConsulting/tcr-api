@@ -7,7 +7,7 @@ class Account extends Component {
 
     this.owner = owner;
     this.address = address;
-    this.tokenContract = contract('StandardToken', address, provider);
+    this.tokenContract = contract('EIP20', address, provider);
   }
 
   getTokenBalance() {
