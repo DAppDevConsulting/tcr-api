@@ -25,8 +25,7 @@ class PLCRVoting extends Component {
   }
 
   async getTokenBalance(address) {
-    // TODO: m.b. big number?
-    return parseInt(await this.contract.methods.voteTokenBalance(address).call(), 10);
+    return (await this.contract.methods.voteTokenBalance(address).call());
   }
 
   async getCommitHash(address, pollId) {

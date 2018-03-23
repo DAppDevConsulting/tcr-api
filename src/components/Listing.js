@@ -80,7 +80,7 @@ class Listing extends Component {
   async getDeposit() {
     let data = await this._getData();
 
-    return parseInt(data['unstakedDeposit'], 10);
+    return data['unstakedDeposit'];
   }
 
   exists() {
