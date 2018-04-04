@@ -15,6 +15,7 @@ class Component {
 
     return fn(...args).send(sendObject);
   }
+
   async getNowTimestamp() {
     const block = await this.provider.eth.getBlock('latest');
 

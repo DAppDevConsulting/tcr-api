@@ -4,11 +4,10 @@ import Component from './Component';
 import Challenge from './Challenge';
 
 class Listing extends Component {
-  constructor(name, registry) {
+  constructor(hash, registry) {
     super(registry.provider);
 
-    this.name = name;
-    this.hash = Listing.hashName(name);
+    this.hash = hash;
     this.registry = registry;
     this.contract = registry.contract;
   }
@@ -22,9 +21,8 @@ class Listing extends Component {
   async getStageStatus() {
     let challenge = await this.getChallenge();
     let poll = await challenge.getPoll();
-    const poolExists = await poll.exists();
 
-    if (await this.hasChallenge() && poolExists) {
+    if (await this.hasChallenge() && await poll.exists()) {
       switch (await poll.getCurrentStage()) {
         case 'commit':
           return 'VoteCommit';
@@ -33,8 +31,10 @@ class Listing extends Component {
       }
     }
 
-    if ((poolExists && await poll.isEnded()) &&
-        (await this.canBeWhitelisted() || await challenge.canBeResolved())) {
+    if (
+      (await poll.exists() && await poll.isEnded()) &&
+      (await this.canBeWhitelisted() || await challenge.canBeResolved())
+    ) {
       return await poll.isPassed() ? 'WillBeWhitelisted' : 'WillBeRejected';
     } else if (await this.canBeWhitelisted()) {
       return 'WillBeWhitelisted';
@@ -50,7 +50,7 @@ class Listing extends Component {
   }
 
   canBeWhitelisted() {
-    return this.contract.methods.canBeWhitelisted(this.name).call();
+    return this.contract.methods.canBeWhitelisted(this.hash).call();
   }
 
   async getChallenge() {
@@ -80,17 +80,16 @@ class Listing extends Component {
   async getDeposit() {
     let data = await this._getData();
 
-    return parseInt(data['unstakedDeposit'], 10);
+    return data['unstakedDeposit'];
   }
 
   exists() {
     // Listing cannot exists without owner, therefore we use this to validate existence
-    return this.contract.methods.appWasMade(this.name).call();
+    return this.contract.methods.appWasMade(this.hash).call();
   }
 
   async getData() {
     return {
-      'name': this.name,
       'owner': await this.getOwner(),
       'isWhitelisted': await this.isWhitelisted(),
       'exists': await this.exists(),
@@ -99,34 +98,34 @@ class Listing extends Component {
   }
 
   async challenge(sendObj = {}) {
-    await this.send(this.contract.methods.challenge, this.name, sendObj);
+    await this.send(this.contract.methods.challenge, this.hash, 'wow', sendObj);
 
     return this.getChallenge();
   }
 
   updateStatus(sendObj = {}) {
-    return this.send(this.contract.methods.updateStatus, this.name, sendObj);
+    return this.send(this.contract.methods.updateStatus, this.hash, sendObj);
   }
 
   deposit(amount, sendObj = {}) {
-    return this.send(this.contract.methods.deposit, this.name, amount, sendObj);
+    return this.send(this.contract.methods.deposit, this.hash, amount, sendObj);
   }
 
   withdraw(amount, sendObj = {}) {
-    return this.send(this.contract.methods.withdraw, this.name, amount, sendObj);
+    return this.send(this.contract.methods.withdraw, this.hash, amount, sendObj);
   }
 
   remove(sendObj = {}) {
-    return this.send(this.contract.methods.exit, this.name, sendObj);
+    return this.send(this.contract.methods.exit, this.hash, sendObj);
   }
 
   /* Returns a raw data */
   _getData() {
-    return this.contract.methods.listings(Listing.hashName(this.name)).call();
+    return this.contract.methods.listings(this.hash).call();
   }
 
   static hashName(name) {
-    return web3Utils.sha3(name);
+    return web3Utils.keccak256(name);
   }
 }
 

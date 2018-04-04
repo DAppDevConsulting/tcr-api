@@ -14,22 +14,22 @@ class Registry extends Component {
     this.contract = contract('Registry', address, provider);
   }
 
-  async createListing(name, amount, _sendObj = {}) {
-    await this.send(this.contract.methods.apply, name, amount, _sendObj);
+  async createListing(hash, amount, data, _sendObj = {}) {
+    await this.send(this.contract.methods.apply, hash, amount, data, _sendObj);
 
-    return new Listing(name, this);
+    return new Listing(hash, this);
   }
 
-  getListing(name) {
-    return new Listing(name, this);
+  getListing(hash) {
+    return new Listing(hash, this);
   }
 
   getChallenge(id) {
     return new Challenge(id, this);
   }
 
-  hasListing(name) {
-    return this.getListing(name).exists();
+  hasListing(hash) {
+    return this.getListing(hash).exists();
   }
 
   async getPLCRVoting() {
@@ -48,6 +48,17 @@ class Registry extends Component {
     let parameterizerAddress = await this.contract.methods.parameterizer().call();
 
     return new Parameterizer(parameterizerAddress, this.provider);
+  }
+
+  async getName() {
+    try {
+      let name = await this.contract.methods.name().call();
+
+      return name;
+    } catch (err) {
+      console.log(err);
+    }
+    return 'no name available';
   }
 }
 

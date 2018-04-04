@@ -13,6 +13,10 @@ class Challenge extends Component {
     return this.contract.methods.challengeWinnerReward(this.id).call();
   }
 
+  exists() {
+    return this.contract.methods.challengeExists(this.listing.hash).call();
+  }
+
   async canBeResolved() {
     let isResolved = await this.isResolved();
 

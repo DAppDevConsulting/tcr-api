@@ -15,42 +15,21 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
+    "inputs": [],
+    "name": "INITIAL_POLL_NONCE",
+    "outputs": [
       {
-        "name": "_pollID",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "commitStageActive",
-    "outputs": [
-      {
-        "name": "active",
-        "type": "bool"
-      }
-    ],
     "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_pollID",
-        "type": "uint256"
-      }
-    ],
-    "name": "revealStageActive",
-    "outputs": [
-      {
-        "name": "active",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -77,6 +56,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -95,6 +75,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -113,6 +94,26 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_pollID",
+        "type": "uint256"
+      }
+    ],
+    "name": "revealPeriodActive",
+    "outputs": [
+      {
+        "name": "active",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -131,6 +132,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -165,6 +167,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -183,6 +186,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -208,6 +212,7 @@
     "name": "commitVote",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -230,6 +235,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -260,6 +266,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -278,6 +285,21 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "pollNonce",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -291,6 +313,7 @@
     "name": "rescueTokens",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -313,6 +336,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -326,6 +350,26 @@
     "name": "requestVotingRights",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_pollID",
+        "type": "uint256"
+      }
+    ],
+    "name": "commitPeriodActive",
+    "outputs": [
+      {
+        "name": "active",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -347,6 +391,7 @@
     "name": "revealVote",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -373,6 +418,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -395,6 +441,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -417,6 +464,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -439,6 +487,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -457,6 +506,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -470,6 +520,7 @@
     "name": "withdrawVotingRights",
     "outputs": [],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -488,6 +539,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -501,6 +553,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -511,6 +564,7 @@
       }
     ],
     "payable": false,
+    "stateMutability": "nonpayable",
     "type": "constructor"
   },
   {
